@@ -55,7 +55,7 @@ module.exports = function (grunt) {
             }
         },
         useminPrepare: {
-            html: 'app/menu.html',
+            html: 'app/index.html',
             options: {
                 dest: 'dist'
             }

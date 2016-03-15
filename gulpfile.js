@@ -17,13 +17,14 @@ var gulp = require('gulp'),
     ngannotate = require('gulp-ng-annotate'),
     del = require('del');
 
+// Jshin
 gulp.task('jshint', function() {
   return gulp.src('app/scripts/**/*.js')
   .pipe(jshint())
   .pipe(jshint.reporter(stylish));
 });
 
-// Clean
+// Clean Dist Folder
 gulp.task('clean', function() {
     return del(['dist']);
 });
@@ -33,8 +34,9 @@ gulp.task('default', ['clean'], function() {
     gulp.start('usemin', 'imagemin','copyfonts');
 });
 
+//Usemin: Minifica Css y Js.  Mofifica sintaxis de angular 
 gulp.task('usemin',['jshint'], function () {
-  return gulp.src('./app/menu.html')
+  return gulp.src('./app/**/*.html')
       .pipe(usemin({
         css:[minifycss(),rev()],
         js: [ngannotate(),uglify(),rev()]
@@ -42,7 +44,7 @@ gulp.task('usemin',['jshint'], function () {
       .pipe(gulp.dest('dist/'));
 });
 
-// Images
+// Images minify
 gulp.task('imagemin', function() {
   return del(['dist/images']), gulp.src('app/images/**/*')
     .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
@@ -50,12 +52,14 @@ gulp.task('imagemin', function() {
     .pipe(notify({ message: 'Images task complete' }));
 });
 
+//Copy Fonts to Dist Folder
 gulp.task('copyfonts', ['clean'], function() {
    gulp.src('./bower_components/font-awesome/fonts/**/*.{ttf,woff,eof,svg}*')
    .pipe(gulp.dest('./dist/fonts'));
    gulp.src('./bower_components/bootstrap/dist/fonts/**/*.{ttf,woff,eof,svg}*')
    .pipe(gulp.dest('./dist/fonts'));
 });
+
 //Procesar scripts
 gulp.task('procesaScripts', [''], function () { // dentro de los corchetes van las dependencias que son otras tareas requeridas para ejecutar esta tarea
     console.log('Esta tarea procesa los scripts');
@@ -82,9 +86,9 @@ gulp.task('browser-sync', ['default'], function () {
    browserSync.init(files, {
       server: {
          baseDir: "dist",
-         index: "menu.html"
+         index: "index.html"
       }
    });
-        // Watch any files in dist/, reload on change
+  // Watch changes in any files in dist/, reload on change
   gulp.watch(['dist/**']).on('change', browserSync.reload);
     });
